@@ -21,7 +21,13 @@ static void *
 init (BtorSATMgr *smgr)
 {
   (void) smgr;
-  return ccadical_init ();
+  CCaDiCaL *slv = ccadical_init ();
+  if (smgr->inc_required
+      && btor_opt_get (smgr->btor, BTOR_OPT_SAT_ENGINE_CADICAL_FREEZE))
+  {
+    ccadical_set_option (slv, "checkfrozen", 1);
+  }
+  return slv;
 }
 
 static void
@@ -81,6 +87,23 @@ sat (BtorSATMgr *smgr, int32_t limit)
 /* incremental API                                                        */
 /*------------------------------------------------------------------------*/
 
+static int32_t
+inc_max_var (BtorSATMgr *smgr)
+{
+  int32_t var = smgr->maxvar + 1;
+  if (smgr->inc_required)
+  {
+    ccadical_freeze (smgr->solver, var);
+  }
+  return var;
+}
+
+static void
+melt (BtorSATMgr *smgr, int32_t lit)
+{
+  if (smgr->inc_required) ccadical_melt (smgr->solver, lit);
+}
+
 /*------------------------------------------------------------------------*/
 
 bool
@@ -109,8 +132,16 @@ btor_sat_enable_cadical (BtorSATMgr *smgr)
   smgr->api.set_output       = 0;
   smgr->api.set_prefix       = 0;
   smgr->api.stats            = 0;
+
+  if (btor_opt_get (smgr->btor, BTOR_OPT_SAT_ENGINE_CADICAL_FREEZE))
+  {
+    smgr->api.inc_max_var = inc_max_var;
+    smgr->api.melt        = melt;
+  }
+
   return true;
 }
+
 /*------------------------------------------------------------------------*/
 #endif
 /*------------------------------------------------------------------------*/
