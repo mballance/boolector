@@ -317,6 +317,7 @@ btor_bv_get_assignment (BtorMemMgr *mm, BtorNode *exp)
 {
   assert (mm);
   assert (exp);
+  assert (!btor_node_is_simplified (exp));
 
   uint32_t i, j, width;
   int32_t bit;

@@ -13,6 +13,7 @@
 #include "simplifier/btorskel.h"
 #include "btorcore.h"
 #include "btordbg.h"
+#include "btorlog.h"
 #include "utils/btorhashint.h"
 #include "utils/btorutil.h"
 
@@ -312,6 +313,9 @@ btor_process_skeleton (Btor *btor)
         if (!btor_hashptr_table_get (btor->synthesized_constraints, exp)
             && !btor_hashptr_table_get (btor->unsynthesized_constraints, exp))
         {
+          BTORLOG (1,
+                   "found constraint (skeleton): %s",
+                   btor_util_node2string (exp));
           btor_assert_exp (btor, exp);
           btor->stats.skeleton_constraints++;
           fixed++;
