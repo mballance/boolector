@@ -62,7 +62,8 @@ test_smtaxiom (int32_t argc, char **argv, char *p, int32_t i)
   char outfilename[] = "btortmp-XXXXXX";
 
   g_btor = boolector_new ();
-  if (g_rwreads) boolector_set_opt (g_btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+  if (g_rwreads)
+    boolector_set_opt (g_btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
   len_name = strlen (prefix) + strlen (p) + 10 + 1;
   BTOR_NEWN (g_mm, name, len_name);

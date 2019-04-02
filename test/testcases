@@ -461,7 +461,7 @@ rw219 -rwl 3 -o rw219.log rw219.smt2
 rw220 -rwl 3 -o rw220.log rw220.smt2
 rw221 -rwl 3 -o rw221.log rw221.smt2
 rww1 -rwl 3 -o rww1.log rww1.btor
-rwr1 -rwl 3 -bra -o rwr1.log rwr1.btor
+rwr1 -rwl 3 -br all -o rwr1.log rwr1.btor
 hd1 -rwl 0 -o hd1.log hd1.btor
 hd1 -rwl 1 -o hd1.log hd1.btor
 hd2 -rwl 0 -o hd2.log hd2.btor
@@ -709,8 +709,8 @@ regaddnorm2 -db -o regaddnorm2.log regaddnorm2.btor
 regnegadd1 -db -o regnegadd1.log regnegadd1.btor
 sc12fuzzcheck2 -o sc12fuzzcheck2.log sc12fuzzcheck2.smt2
 regmismatch regmismatch.smt2 -o regmismatch.log
-regrbetacache1 -bra -o regrbetacache1.log regrbetacache1.btor
-regrbetacache2 -bra -o regrbetacache2.log regrbetacache2.btor
+regrbetacache1 -br all -o regrbetacache1.log regrbetacache1.btor
+regrbetacache2 -br all -o regrbetacache2.log regrbetacache2.btor
 regrencparamapps -o regrencparamapps.log regrencparamapps.smt2
 nestedfun1 -rwl 2 -o nestedfun1.log nestedfun1.smt2
 regrcollectprem -o regrcollectprem.log regrcollectprem.btor

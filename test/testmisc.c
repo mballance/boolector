@@ -99,7 +99,8 @@ slice_test_misc (int32_t low, int32_t high, uint32_t rwl)
 
         btor = boolector_new ();
         boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-        if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+        if (g_rwreads)
+          boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
         result = slice (x, i, j, num_bits);
 
@@ -189,7 +190,8 @@ ext_test_misc (char *(*func) (int32_t, int32_t, int32_t),
 
         btor = boolector_new ();
         boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-        if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+        if (g_rwreads)
+          boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
         result = func (i, j, num_bits);
         fin    = mk_temp_file (infilename, "r+");
@@ -266,7 +268,8 @@ concat_test_misc (int32_t low, int32_t high, uint32_t rwl)
 
         btor = boolector_new ();
         boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-        if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+        if (g_rwreads)
+          boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
         result = concat (i, j, num_bits);
         fin    = mk_temp_file (infilename, "r+");
@@ -324,7 +327,9 @@ cond_test_misc (int32_t low, int32_t high, uint32_t rwl)
 
           btor = boolector_new ();
           boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-          if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+          if (g_rwreads)
+            boolector_set_opt (
+                btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
           result = k ? i : j;
           fin    = mk_temp_file (infilename, "r+");
@@ -379,7 +384,8 @@ read_test_misc (int32_t low, int32_t high, uint32_t rwl)
 
         btor = boolector_new ();
         boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-        if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+        if (g_rwreads)
+          boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
         fin = mk_temp_file (infilename, "r+");
 

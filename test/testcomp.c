@@ -68,7 +68,9 @@ u_comp_test (int32_t (*func) (int32_t, int32_t),
 
         g_btor = boolector_new ();
         boolector_set_opt (g_btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-        if (g_rwreads) boolector_set_opt (g_btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+        if (g_rwreads)
+          boolector_set_opt (
+              g_btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
         result = func (i, j);
         fin    = mk_temp_file (infilename, "r+");
@@ -130,7 +132,9 @@ s_comp_test (int32_t (*func) (int32_t, int32_t),
 
         g_btor = boolector_new ();
         boolector_set_opt (g_btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-        if (g_rwreads) boolector_set_opt (g_btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+        if (g_rwreads)
+          boolector_set_opt (
+              g_btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
         result = func (i, j);
         fin    = mk_temp_file (infilename, "r+");

@@ -32,7 +32,8 @@ void
 init_lambda_test (void)
 {
   g_btor = btor_new ();
-  if (g_rwreads) btor_opt_set (g_btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+  if (g_rwreads)
+    btor_opt_set (g_btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
   g_elem_sort  = btor_sort_bv (g_btor, g_elem_bw);
   g_index_sort = btor_sort_bv (g_btor, g_index_bw);
   g_array_sort = btor_sort_array (g_btor, g_index_sort, g_elem_sort);

@@ -28,7 +28,8 @@ static void
 init_inc_test (void)
 {
   g_btor = boolector_new ();
-  if (g_rwreads) boolector_set_opt (g_btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+  if (g_rwreads)
+    boolector_set_opt (g_btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 }
 
 static void

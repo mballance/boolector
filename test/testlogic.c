@@ -60,7 +60,8 @@ not_logic_test (int32_t low, int32_t high, uint32_t rwl)
 
       btor = boolector_new ();
       boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-      if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+      if (g_rwreads)
+        boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
       result = ~i & (max - 1);
       fin    = mk_temp_file (infilename, "r+");
@@ -117,7 +118,8 @@ binary_logic_test (uint32_t (*func) (uint32_t, uint32_t),
 
         btor = boolector_new ();
         boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-        if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+        if (g_rwreads)
+          boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
         result = func (i, j);
         fin    = mk_temp_file (infilename, "r+");
@@ -171,7 +173,8 @@ xnor_logic_test (int32_t low, int32_t high, uint32_t rwl)
 
         btor = boolector_new ();
         boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-        if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+        if (g_rwreads)
+          boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
         result = ~(i ^ j) & (max - 1);
         fin    = mk_temp_file (infilename, "r+");
@@ -229,7 +232,8 @@ red_logic_test (uint32_t (*func) (uint32_t, uint32_t),
 
       btor = boolector_new ();
       boolector_set_opt (btor, BTOR_OPT_REWRITE_LEVEL, rwl);
-      if (g_rwreads) boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+      if (g_rwreads)
+        boolector_set_opt (btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
       result = func (i, (uint32_t) num_bits);
       fin    = mk_temp_file (infilename, "r+");

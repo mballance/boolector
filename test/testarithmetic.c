@@ -72,7 +72,8 @@ u_arithmetic_test (int32_t (*func) (int32_t, int32_t),
           g_btor = boolector_new ();
           boolector_set_opt (g_btor, BTOR_OPT_REWRITE_LEVEL, rwl);
           if (g_rwreads)
-            boolector_set_opt (g_btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+            boolector_set_opt (
+                g_btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
           fin = mk_temp_file (infilename, "r+");
           assert (fin != NULL);
@@ -148,7 +149,8 @@ s_arithmetic_test (int32_t (*func) (int32_t, int32_t),
           g_btor = boolector_new ();
           boolector_set_opt (g_btor, BTOR_OPT_REWRITE_LEVEL, rwl);
           if (g_rwreads)
-            boolector_set_opt (g_btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+            boolector_set_opt (
+                g_btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 
           fin = mk_temp_file (infilename, "r+");
           assert (fin != NULL);

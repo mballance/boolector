@@ -33,7 +33,8 @@ void
 init_exp_test (void)
 {
   g_btor = btor_new ();
-  if (g_rwreads) btor_opt_set (g_btor, BTOR_OPT_BETA_REDUCE_ALL, 1);
+  if (g_rwreads)
+    btor_opt_set (g_btor, BTOR_OPT_BETA_REDUCE, BTOR_BETA_REDUCE_ALL);
 }
 
 void
