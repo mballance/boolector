@@ -1361,7 +1361,7 @@ PROP_INV_CONF_CONCAT_TESTS:
     {
       bve[j] = btor_bv_slice (
           g_mm, bvconcat, j ? bws[1] - 1 : bw - 1, j ? 0 : bws[1]);
-      assert (bve[j]->width == bws[j]);
+      assert (btor_bv_get_width (bve[j]) == bws[j]);
       tmp[j] = btor_bv_copy (g_mm, bve[j]);
       cnt    = 0;
       while (!cnt)

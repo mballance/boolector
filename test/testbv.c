@@ -57,32 +57,16 @@ test_new_bitvec (void)
   BtorBitVector *bv;
 
   bv = btor_bv_new (g_mm, BTOR_BV_TYPE_BW);
-  assert (bv->len == 1);
+  assert (btor_bv_get_len (bv) == 1);
   btor_bv_free (g_mm, bv);
 
   bv = btor_bv_new (g_mm, BTOR_BV_TYPE_BW - 1);
-  assert (bv->len == 1);
+  assert (btor_bv_get_len (bv) == 1);
   btor_bv_free (g_mm, bv);
 
   bv = btor_bv_new (g_mm, BTOR_BV_TYPE_BW + 1);
-  assert (bv->len == 2);
+  assert (btor_bv_get_len (bv) == 2);
   btor_bv_free (g_mm, bv);
-}
-
-static BtorBitVector *
-random_bv (uint32_t bw)
-{
-  uint32_t i;
-  BtorBitVector *res;
-  res = btor_bv_new (g_mm, bw);
-
-  for (i = 0; i < res->len; i++) res->bits[i] = (BTOR_BV_TYPE) rand ();
-
-  if (bw != BTOR_BV_TYPE_BW * res->len)
-    res->bits[0] &= ((((BTOR_BV_TYPE) 1 << (BTOR_BV_TYPE_BW - 1)) - 1)
-                     >> (BTOR_BV_TYPE_BW - 1 - (bw % BTOR_BV_TYPE_BW)));
-
-  return res;
 }
 
 static void
@@ -94,18 +78,18 @@ test_new_random_range_bitvec (void)
 
   for (bw = 1; bw <= 64; bw++)
   {
-    from = random_bv (bw);
+    from = btor_bv_new_random (g_mm, g_rng, bw);
     // from == to
     bv  = btor_bv_new_random_range (g_mm, g_rng, bw, from, from);
     val = btor_bv_to_uint64 (bv);
     assert (val == btor_bv_to_uint64 (from));
     btor_bv_free (g_mm, bv);
     // from < to
-    to = random_bv (bw);
+    to = btor_bv_new_random (g_mm, g_rng, bw);
     while (!btor_bv_compare (from, to))
     {
       btor_bv_free (g_mm, to);
-      to = random_bv (bw);
+      to = btor_bv_new_random (g_mm, g_rng, bw);
     }
     if (btor_bv_to_uint64 (to) < btor_bv_to_uint64 (from))
     {
@@ -144,7 +128,7 @@ test_uint64_to_bitvec (void)
     for (j = 0; j < 5; j++)
     {
       l  = rand () % 32 + 1;
-      bv = random_bv (l);
+      bv = btor_bv_new_random (g_mm, g_rng, l);
       k  = btor_bv_to_uint64 (bv);
       btor_bv_free (g_mm, bv);
       bv = btor_bv_uint64_to_bv (g_mm, k, l);
@@ -444,18 +428,18 @@ test_char_to_bitvec (void)
   btor_bv_free (g_mm, bv);
 }
 
-#define CHECK_CHAR_TO_BV(bv, i)              \
-  do                                         \
-  {                                          \
-    s = btor_bv_to_char (g_mm, bv);          \
-    assert (strlen (s) == bv->width);        \
-    for (k = 0; k < i; k++)                  \
-    {                                        \
-      b = s[i - k - 1] == '0' ? 0 : 1;       \
-      assert (b == btor_bv_get_bit (bv, k)); \
-    }                                        \
-    btor_mem_freestr (g_mm, s);              \
-    btor_bv_free (g_mm, bv);                 \
+#define CHECK_CHAR_TO_BV(bv, i)                    \
+  do                                               \
+  {                                                \
+    s = btor_bv_to_char (g_mm, bv);                \
+    assert (strlen (s) == btor_bv_get_width (bv)); \
+    for (k = 0; k < i; k++)                        \
+    {                                              \
+      b = s[i - k - 1] == '0' ? 0 : 1;             \
+      assert (b == btor_bv_get_bit (bv, k));       \
+    }                                              \
+    btor_mem_freestr (g_mm, s);                    \
+    btor_bv_free (g_mm, bv);                       \
   } while (0)
 
 static void
@@ -656,7 +640,7 @@ unary_bitvec (uint64_t (*int_func) (uint64_t, uint32_t),
   fflush (stdout);
   for (i = 0; i < num_tests; i++)
   {
-    bv   = random_bv (bit_width);
+    bv   = btor_bv_new_random (g_mm, g_rng, bit_width);
     res  = bitvec_func (g_mm, bv);
     a    = btor_bv_to_uint64 (bv);
     ares = int_func (a, bit_width);
@@ -759,8 +743,8 @@ binary_bitvec (uint64_t (*int_func) (uint64_t, uint64_t, uint32_t),
   zero = btor_bv_new (g_mm, bit_width);
   for (i = 0; i < num_tests; i++)
   {
-    bv1  = random_bv (bit_width);
-    bv2  = random_bv (bit_width);
+    bv1  = btor_bv_new_random (g_mm, g_rng, bit_width);
+    bv2  = btor_bv_new_random (g_mm, g_rng, bit_width);
     a1   = btor_bv_to_uint64 (bv1);
     a2   = btor_bv_to_uint64 (bv2);
     /* test for x = 0 explicitly */
@@ -1025,10 +1009,10 @@ concat_bitvec (int32_t num_tests, uint32_t bit_width)
   {
     bw1 = btor_rng_pick_rand (g_rng, 1, bit_width - 1);
     bw2 = bit_width - bw1;
-    bv1 = random_bv (bw1);
-    bv2 = random_bv (bw2);
+    bv1 = btor_bv_new_random (g_mm, g_rng, bw1);
+    bv2 = btor_bv_new_random (g_mm, g_rng, bw2);
     res = btor_bv_concat (g_mm, bv1, bv2);
-    assert (res->width == bw1 + bw2);
+    assert (btor_bv_get_width (res) == bw1 + bw2);
     a1   = btor_bv_to_uint64 (bv1);
     a2   = btor_bv_to_uint64 (bv2);
     ares = (a1 << bw2) | a2;
@@ -1061,7 +1045,7 @@ slice_bitvec (uint32_t num_tests, uint32_t bit_width)
   fflush (stdout);
   for (i = 0; i < num_tests; i++)
   {
-    bv    = random_bv (bit_width);
+    bv    = btor_bv_new_random (g_mm, g_rng, bit_width);
     lower = rand () % bit_width;
     upper = rand () % (bit_width - lower) + lower;
     assert (upper >= lower);
@@ -1069,7 +1053,7 @@ slice_bitvec (uint32_t num_tests, uint32_t bit_width)
     assert (lower < bit_width);
 
     res = btor_bv_slice (g_mm, bv, upper, lower);
-    assert (res->width == upper - lower + 1);
+    assert (btor_bv_get_width (res) == upper - lower + 1);
     sres = btor_bv_to_char (g_mm, res);
     sbv  = btor_bv_to_char (g_mm, bv);
 
@@ -1108,10 +1092,10 @@ ext_bitvec (BtorBitVector *(*ext_func) (BtorMemMgr *,
   for (i = 0; i < num_tests; i++)
   {
     len = btor_rng_pick_rand (g_rng, 1, bit_width - 1);
-    bv  = random_bv (bit_width - len);
+    bv  = btor_bv_new_random (g_mm, g_rng, bit_width - len);
 
     res = ext_func (g_mm, bv, len);
-    assert (bv->width + len == res->width);
+    assert (btor_bv_get_width (bv) + len == btor_bv_get_width (res));
     sres = btor_bv_to_char (g_mm, res);
     sbv  = btor_bv_to_char (g_mm, bv);
 
@@ -1166,7 +1150,7 @@ flipped_bit_bitvec (uint32_t num_tests, uint32_t bit_width)
   for (i = 0; i < num_tests; i++)
   {
     pos = btor_rng_pick_rand (g_rng, 0, bit_width - 1);
-    bv  = random_bv (bit_width);
+    bv  = btor_bv_new_random (g_mm, g_rng, bit_width);
     res = btor_bv_flipped_bit (g_mm, bv, pos);
     assert (btor_bv_get_bit (bv, pos) == !btor_bv_get_bit (res, pos));
     for (j = 0; j < bit_width; j++)
@@ -1203,7 +1187,7 @@ flipped_bit_range_bitvec (uint32_t num_tests, uint32_t bit_width)
     up = lo == bit_width - 1
              ? bit_width - 1
              : btor_rng_pick_rand (g_rng, lo + 1, bit_width - 1);
-    bv  = random_bv (bit_width);
+    bv  = btor_bv_new_random (g_mm, g_rng, bit_width);
     res = btor_bv_flipped_bit_range (g_mm, bv, up, lo);
     for (j = lo; j <= up; j++)
       assert (btor_bv_get_bit (bv, j) == !btor_bv_get_bit (res, j));
@@ -2023,8 +2007,6 @@ test_get_num_leading_ones_bitvec (void)
 void
 run_bitvec_tests (int32_t argc, char **argv)
 {
-  srand (42);
-
   BTOR_RUN_TEST (new_bitvec);
   BTOR_RUN_TEST (new_random_range_bitvec);
 
