@@ -2025,6 +2025,8 @@ run_bitvec_tests (int32_t argc, char **argv)
 {
   BTOR_RUN_TEST (new_bitvec);
   BTOR_RUN_TEST (new_random_range_bitvec);
+  // TODO btor_bv_new_random
+  // TODO btor_bv_new_random_bit_range
 
   BTOR_RUN_TEST (uint64_to_bitvec);
   BTOR_RUN_TEST (uint64_to_bv_to_uint64_bitvec);
@@ -2033,6 +2035,18 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (bv_to_char_bitvec);
   BTOR_RUN_TEST_CHECK_LOG (bv_to_hex_char_bitvec);
   BTOR_RUN_TEST_CHECK_LOG (bv_to_dec_char_bitvec);
+  // TODO btor_bv_dec_to_bv
+  // TODO btor_bv_const
+  // TODO btor_bv_constd
+  // TODO btor_bv_consth
+  // TODO btor_bv_get_assignment
+  // TODO btor_bv_copy
+
+  // TODO btor_bv_hash
+
+  // TODO btor_bv_get_bit
+  // TODO btor_bv_set_bit
+  // TODO btor_bv_flip_bit
 
   BTOR_RUN_TEST (one_bitvec);
   BTOR_RUN_TEST (ones_bitvec);
@@ -2047,10 +2061,16 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (add_bitvec);
   BTOR_RUN_TEST (sub_bitvec);
   BTOR_RUN_TEST (and_bitvec);
-  BTOR_RUN_TEST (implies_bitvec);
+  // TODO btor_bv_nand
+  // TODO btor_bv_or
+  // TODO btor_bv_nor
   BTOR_RUN_TEST (xor_bitvec);
+  // TODO btor_bv_xnor
+  BTOR_RUN_TEST (implies_bitvec);
   BTOR_RUN_TEST (eq_bitvec);
+  // TODO btor_bv_ne
   BTOR_RUN_TEST (ult_bitvec);
+  // TODO btor_bv_ulte
   BTOR_RUN_TEST (sll_bitvec);
   BTOR_RUN_TEST (srl_bitvec);
   BTOR_RUN_TEST (mul_bitvec);
@@ -2061,16 +2081,26 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (uext_bitvec);
   BTOR_RUN_TEST (sext_bitvec);
 
+  // TODO btor_bv_redor
+  // TODO btor_bv_redand
+  // TODO btor_bv_ite
+
   BTOR_RUN_TEST (flipped_bit_bitvec);
   BTOR_RUN_TEST (flipped_bit_range_bitvec);
 
   BTOR_RUN_TEST (is_umulo_bitvec);
 
+  // TODO btor_bv_mod_inverse
+
   BTOR_RUN_TEST (compare_bitvec);
 
+  // TODO btor_bv_is_true
+  // TODO btor_bv_is_false
   BTOR_RUN_TEST (is_one_bitvec);
   BTOR_RUN_TEST (is_ones_bitvec);
   BTOR_RUN_TEST (is_zero_bitvec);
+  // btor_bv_is_min_signed
+  // btor_bv_is_max_signed
   BTOR_RUN_TEST (is_special_const_bitvec);
   BTOR_RUN_TEST (small_positive_int_bitvec);
   BTOR_RUN_TEST (power_of_two_bitvec);
