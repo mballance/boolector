@@ -710,6 +710,14 @@ xor (uint64_t x, uint64_t y, uint32_t bw)
 }
 
 static uint64_t
+xnor (uint64_t x, uint64_t y, uint32_t bw)
+{
+  assert (bw <= 64);
+  uint32_t shift = 64 - bw;
+  return ((~(x ^ y)) << shift) >> shift;
+}
+
+static uint64_t
 eq (uint64_t x, uint64_t y, uint32_t bw)
 {
   (void) bw;
@@ -991,6 +999,16 @@ test_xor_bitvec (void)
   binary_bitvec (xor, btor_bv_xor, BTOR_TEST_BITVEC_TESTS, 31);
   binary_bitvec (xor, btor_bv_xor, BTOR_TEST_BITVEC_TESTS, 33);
   binary_bitvec (xor, btor_bv_xor, BTOR_TEST_BITVEC_TESTS, 64);
+}
+
+static void
+test_xnor_bitvec (void)
+{
+  binary_bitvec (xnor, btor_bv_xnor, BTOR_TEST_BITVEC_TESTS, 1);
+  binary_bitvec (xnor, btor_bv_xnor, BTOR_TEST_BITVEC_TESTS, 7);
+  binary_bitvec (xnor, btor_bv_xnor, BTOR_TEST_BITVEC_TESTS, 31);
+  binary_bitvec (xnor, btor_bv_xnor, BTOR_TEST_BITVEC_TESTS, 33);
+  binary_bitvec (xnor, btor_bv_xnor, BTOR_TEST_BITVEC_TESTS, 64);
 }
 
 static void
@@ -2118,7 +2136,7 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (or_bitvec);
   BTOR_RUN_TEST (nor_bitvec);
   BTOR_RUN_TEST (xor_bitvec);
-  // TODO btor_bv_xnor
+  BTOR_RUN_TEST (xnor_bitvec);
   BTOR_RUN_TEST (implies_bitvec);
   BTOR_RUN_TEST (eq_bitvec);
   // TODO btor_bv_ne
