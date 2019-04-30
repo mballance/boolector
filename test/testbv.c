@@ -428,6 +428,228 @@ test_char_to_bitvec (void)
   btor_bv_free (g_mm, bv);
 }
 
+static void
+test_constd_bitvec (void)
+{
+  BtorBitVector *bv;
+
+  bv = btor_bv_constd (g_mm, "0", 1);
+  assert (btor_bv_to_uint64 (bv) == 0);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1", 1);
+  assert (btor_bv_to_uint64 (bv) == 1);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "0", 2);
+  assert (btor_bv_to_uint64 (bv) == 0);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1", 2);
+  assert (btor_bv_to_uint64 (bv) == 1);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "2", 2);
+  assert (btor_bv_to_uint64 (bv) == 2);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "3", 2);
+  assert (btor_bv_to_uint64 (bv) == 3);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "0", 3);
+  assert (btor_bv_to_uint64 (bv) == 0);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1", 3);
+  assert (btor_bv_to_uint64 (bv) == 1);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "2", 3);
+  assert (btor_bv_to_uint64 (bv) == 2);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "3", 3);
+  assert (btor_bv_to_uint64 (bv) == 3);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "4", 3);
+  assert (btor_bv_to_uint64 (bv) == 4);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "5", 3);
+  assert (btor_bv_to_uint64 (bv) == 5);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "6", 3);
+  assert (btor_bv_to_uint64 (bv) == 6);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "7", 3);
+  assert (btor_bv_to_uint64 (bv) == 7);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "0", 32);
+  assert (btor_bv_to_uint64 (bv) == 0);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1", 32);
+  assert (btor_bv_to_uint64 (bv) == 1);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "2", 32);
+  assert (btor_bv_to_uint64 (bv) == 2);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "4", 32);
+  assert (btor_bv_to_uint64 (bv) == 4);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "8", 32);
+  assert (btor_bv_to_uint64 (bv) == 8);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "16", 32);
+  assert (btor_bv_to_uint64 (bv) == 16);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "32", 32);
+  assert (btor_bv_to_uint64 (bv) == 32);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "64", 32);
+  assert (btor_bv_to_uint64 (bv) == 64);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "128", 32);
+  assert (btor_bv_to_uint64 (bv) == 128);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "256", 32);
+  assert (btor_bv_to_uint64 (bv) == 256);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "512", 32);
+  assert (btor_bv_to_uint64 (bv) == 512);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1024", 32);
+  assert (btor_bv_to_uint64 (bv) == 1024);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "2048", 32);
+  assert (btor_bv_to_uint64 (bv) == 2048);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "4096", 32);
+  assert (btor_bv_to_uint64 (bv) == 4096);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "8192", 32);
+  assert (btor_bv_to_uint64 (bv) == 8192);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "16384", 32);
+  assert (btor_bv_to_uint64 (bv) == 16384);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "32768", 32);
+  assert (btor_bv_to_uint64 (bv) == 32768);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "65536", 32);
+  assert (btor_bv_to_uint64 (bv) == 65536);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "131072", 32);
+  assert (btor_bv_to_uint64 (bv) == 131072);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "262144", 32);
+  assert (btor_bv_to_uint64 (bv) == 262144);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "524288", 32);
+  assert (btor_bv_to_uint64 (bv) == 524288);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1048576", 32);
+  assert (btor_bv_to_uint64 (bv) == 1048576);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "2097152", 32);
+  assert (btor_bv_to_uint64 (bv) == 2097152);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "4194304", 32);
+  assert (btor_bv_to_uint64 (bv) == 4194304);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "8388608", 32);
+  assert (btor_bv_to_uint64 (bv) == 8388608);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "16777216", 32);
+  assert (btor_bv_to_uint64 (bv) == 16777216);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "33554432", 32);
+  assert (btor_bv_to_uint64 (bv) == 33554432);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "67108864", 32);
+  assert (btor_bv_to_uint64 (bv) == 67108864);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "134217728", 32);
+  assert (btor_bv_to_uint64 (bv) == 134217728);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "268435456", 32);
+  assert (btor_bv_to_uint64 (bv) == 268435456);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "536870912", 32);
+  assert (btor_bv_to_uint64 (bv) == 536870912);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1073741824", 32);
+  assert (btor_bv_to_uint64 (bv) == 1073741824);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "2147483648", 32);
+  assert (btor_bv_to_uint64 (bv) == 2147483648);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "4294967295", 32);
+  assert (btor_bv_to_uint64 (bv) == UINT32_MAX);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "0", 33);
+  assert (btor_bv_to_uint64 (bv) == 0);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1", 33);
+  assert (btor_bv_to_uint64 (bv) == 1);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "8589934591", 33);
+  assert (btor_bv_to_uint64 (bv) == 8589934591);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "0", 34);
+  assert (btor_bv_to_uint64 (bv) == 0);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "1", 34);
+  assert (btor_bv_to_uint64 (bv) == 1);
+  btor_bv_free (g_mm, bv);
+
+  bv = btor_bv_constd (g_mm, "17179869183", 34);
+  assert (btor_bv_to_uint64 (bv) == 17179869183);
+  btor_bv_free (g_mm, bv);
+}
+
 #define CHECK_CHAR_TO_BV(bv, i)                    \
   do                                               \
   {                                                \
@@ -2137,12 +2359,11 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (uint64_to_bv_to_uint64_bitvec);
   BTOR_RUN_TEST (int64_to_bv_bitvec);
   BTOR_RUN_TEST (char_to_bitvec);
+  BTOR_RUN_TEST (constd_bitvec);
   BTOR_RUN_TEST (bv_to_char_bitvec);
   BTOR_RUN_TEST_CHECK_LOG (bv_to_hex_char_bitvec);
   BTOR_RUN_TEST_CHECK_LOG (bv_to_dec_char_bitvec);
-  // TODO btor_bv_dec_to_bv
   // TODO btor_bv_const
-  // TODO btor_bv_constd
   // TODO btor_bv_consth
   // TODO btor_bv_get_assignment
   // TODO btor_bv_copy
