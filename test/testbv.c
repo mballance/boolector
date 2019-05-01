@@ -1281,6 +1281,20 @@ neg (uint64_t x, uint32_t bw)
 }
 
 static uint64_t
+redand (uint64_t x, uint32_t bw)
+{
+  uint64_t a = UINT64_MAX << bw;
+  return (x + a) == UINT64_MAX;
+}
+
+static uint64_t
+redor (uint64_t x, uint32_t bw)
+{
+  (void) bw;
+  return x != 0;
+}
+
+static uint64_t
 inc (uint64_t x, uint32_t bw)
 {
   return (x + 1) % (uint64_t) pow (2, bw);
@@ -1615,6 +1629,24 @@ test_neg_bitvec (void)
   unary_bitvec (neg, btor_bv_neg, BTOR_TEST_BITVEC_TESTS, 7);
   unary_bitvec (neg, btor_bv_neg, BTOR_TEST_BITVEC_TESTS, 31);
   unary_bitvec (neg, btor_bv_neg, BTOR_TEST_BITVEC_TESTS, 33);
+}
+
+static void
+test_redand_bitvec (void)
+{
+  unary_bitvec (redand, btor_bv_redand, BTOR_TEST_BITVEC_TESTS, 1);
+  unary_bitvec (redand, btor_bv_redand, BTOR_TEST_BITVEC_TESTS, 7);
+  unary_bitvec (redand, btor_bv_redand, BTOR_TEST_BITVEC_TESTS, 31);
+  unary_bitvec (redand, btor_bv_redand, BTOR_TEST_BITVEC_TESTS, 33);
+}
+
+static void
+test_redor_bitvec (void)
+{
+  unary_bitvec (redor, btor_bv_redor, BTOR_TEST_BITVEC_TESTS, 1);
+  unary_bitvec (redor, btor_bv_redor, BTOR_TEST_BITVEC_TESTS, 7);
+  unary_bitvec (redor, btor_bv_redor, BTOR_TEST_BITVEC_TESTS, 31);
+  unary_bitvec (redor, btor_bv_redor, BTOR_TEST_BITVEC_TESTS, 33);
 }
 
 static void
@@ -2897,6 +2929,8 @@ run_bitvec_tests (int32_t argc, char **argv)
 
   BTOR_RUN_TEST (not_bitvec);
   BTOR_RUN_TEST (neg_bitvec);
+  BTOR_RUN_TEST (redand_bitvec);
+  BTOR_RUN_TEST (redor_bitvec);
   BTOR_RUN_TEST (inc_bitvec);
   BTOR_RUN_TEST (dec_bitvec);
 
@@ -2923,8 +2957,6 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (uext_bitvec);
   BTOR_RUN_TEST (sext_bitvec);
 
-  // TODO btor_bv_redor
-  // TODO btor_bv_redand
   // TODO btor_bv_ite
 
   BTOR_RUN_TEST (flipped_bit_bitvec);
