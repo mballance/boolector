@@ -70,6 +70,25 @@ test_new_bitvec (void)
 }
 
 static void
+test_new_random_bitvec (void)
+{
+  uint32_t bw;
+  BtorBitVector *bv1, *bv2, *bv3;
+
+  for (bw = 1; bw <= 64; bw++)
+  {
+    bv1 = btor_bv_new_random (g_mm, g_rng, bw);
+    bv2 = btor_bv_new_random (g_mm, g_rng, bw);
+    bv3 = btor_bv_new_random (g_mm, g_rng, bw);
+    assert (btor_bv_compare (bv1, bv2) || btor_bv_compare (bv1, bv3)
+            || btor_bv_compare (bv2, bv3));
+    btor_bv_free (g_mm, bv1);
+    btor_bv_free (g_mm, bv2);
+    btor_bv_free (g_mm, bv3);
+  }
+}
+
+static void
 test_new_random_range_bitvec (void)
 {
   uint32_t bw;
@@ -2901,6 +2920,7 @@ void
 run_bitvec_tests (int32_t argc, char **argv)
 {
   BTOR_RUN_TEST (new_bitvec);
+  BTOR_RUN_TEST (new_random_bitvec);
   BTOR_RUN_TEST (new_random_range_bitvec);
   // TODO btor_bv_new_random
   // TODO btor_bv_new_random_bit_range
