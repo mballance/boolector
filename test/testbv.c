@@ -176,6 +176,22 @@ test_new_random_bit_range_bitvec (void)
   new_random_bit_range_bitvec (BTOR_TEST_BITVEC_TESTS, 64);
 }
 
+static void
+test_copy_bitvec (void)
+{
+  uint32_t bw;
+  BtorBitVector *bv1, *bv2;
+
+  for (bw = 1; bw <= 64; bw++)
+  {
+    bv1 = btor_bv_new_random (g_mm, g_rng, bw);
+    bv2 = btor_bv_copy (g_mm, bv1);
+    assert (!btor_bv_compare (bv1, bv2));
+    btor_bv_free (g_mm, bv1);
+    btor_bv_free (g_mm, bv2);
+  }
+}
+
 /*------------------------------------------------------------------------*/
 
 static void
@@ -2973,6 +2989,7 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (new_random_bitvec);
   BTOR_RUN_TEST (new_random_range_bitvec);
   BTOR_RUN_TEST (new_random_bit_range_bitvec);
+  BTOR_RUN_TEST (copy_bitvec);
 
   BTOR_RUN_TEST (uint64_to_bitvec);
   BTOR_RUN_TEST (uint64_to_bv_to_uint64_bitvec);
@@ -2985,7 +3002,6 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST_CHECK_LOG (bv_to_hex_char_bitvec);
   BTOR_RUN_TEST_CHECK_LOG (bv_to_dec_char_bitvec);
   // TODO btor_bv_get_assignment
-  // TODO btor_bv_copy
 
   // TODO btor_bv_hash
 
