@@ -2092,6 +2092,58 @@ test_compare_bitvec (void)
 }
 
 static void
+test_is_true_bitvec (void)
+{
+  int32_t i;
+  BtorBitVector *bv1, *bv2;
+
+  for (i = 1; i < 32; i++)
+  {
+    bv1 = btor_bv_one (g_mm, i);
+    bv2 = btor_bv_uint64_to_bv (
+        g_mm, btor_rng_pick_rand (g_rng, 1, (1 << i) - 1), i);
+    if (i > 1)
+    {
+      assert (!btor_bv_is_true (bv1));
+      assert (!btor_bv_is_true (bv2));
+    }
+    else
+    {
+      assert (btor_bv_is_true (bv1));
+      assert (btor_bv_is_true (bv2));
+    }
+    btor_bv_free (g_mm, bv1);
+    btor_bv_free (g_mm, bv2);
+  }
+}
+
+static void
+test_is_false_bitvec (void)
+{
+  int32_t i;
+  BtorBitVector *bv1, *bv2;
+
+  for (i = 1; i < 32; i++)
+  {
+    bv1 = btor_bv_zero (g_mm, i);
+    bv2 = btor_bv_uint64_to_bv (
+        g_mm, btor_rng_pick_rand (g_rng, 1, (1 << i) - 1), i);
+    if (i > 1)
+    {
+      assert (!btor_bv_is_false (bv1));
+      assert (!btor_bv_is_false (bv2));
+    }
+    else
+    {
+      assert (btor_bv_is_false (bv1));
+      assert (!btor_bv_is_false (bv2));
+    }
+    btor_bv_free (g_mm, bv1);
+    btor_bv_free (g_mm, bv2);
+  }
+}
+
+static void
 test_is_one_bitvec (void)
 {
   int32_t i;
@@ -2864,8 +2916,8 @@ run_bitvec_tests (int32_t argc, char **argv)
 
   BTOR_RUN_TEST (compare_bitvec);
 
-  // TODO btor_bv_is_true
-  // TODO btor_bv_is_false
+  BTOR_RUN_TEST (is_true_bitvec);
+  BTOR_RUN_TEST (is_false_bitvec);
   BTOR_RUN_TEST (is_one_bitvec);
   BTOR_RUN_TEST (is_ones_bitvec);
   BTOR_RUN_TEST (is_zero_bitvec);
