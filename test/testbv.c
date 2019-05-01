@@ -126,6 +126,56 @@ test_new_random_range_bitvec (void)
   }
 }
 
+static void
+new_random_bit_range_bitvec (uint32_t num_tests, uint32_t bw)
+{
+  uint32_t i, j, up, lo;
+  BtorBitVector *bv1, *bv2, *bv3;
+
+  tprintf (" %u", bw);
+  fflush (stdout);
+  for (i = 0; i < num_tests; i++)
+  {
+    lo  = btor_rng_pick_rand (g_rng, 0, bw - 1);
+    up  = lo == bw - 1 ? bw - 1 : btor_rng_pick_rand (g_rng, lo + 1, bw - 1);
+    bv1 = btor_bv_new_random_bit_range (g_mm, g_rng, bw, up, lo);
+    bv2 = btor_bv_new_random_bit_range (g_mm, g_rng, bw, up, lo);
+    bv3 = btor_bv_new_random_bit_range (g_mm, g_rng, bw, up, lo);
+    for (j = lo; j <= up; j++)
+    {
+      if (btor_bv_get_bit (bv1, j) != btor_bv_get_bit (bv2, j)
+          || btor_bv_get_bit (bv1, j) != btor_bv_get_bit (bv3, j)
+          || btor_bv_get_bit (bv2, j) != btor_bv_get_bit (bv3, j))
+        break;
+    }
+    for (j = 0; j < lo; j++)
+    {
+      assert (btor_bv_get_bit (bv1, j) == 0);
+      assert (btor_bv_get_bit (bv2, j) == 0);
+      assert (btor_bv_get_bit (bv3, j) == 0);
+    }
+    for (j = up + 1; j < bw; j++)
+    {
+      assert (btor_bv_get_bit (bv1, j) == 0);
+      assert (btor_bv_get_bit (bv2, j) == 0);
+      assert (btor_bv_get_bit (bv3, j) == 0);
+    }
+    btor_bv_free (g_mm, bv1);
+    btor_bv_free (g_mm, bv2);
+    btor_bv_free (g_mm, bv3);
+  }
+}
+
+static void
+test_new_random_bit_range_bitvec (void)
+{
+  new_random_bit_range_bitvec (BTOR_TEST_BITVEC_TESTS, 1);
+  new_random_bit_range_bitvec (BTOR_TEST_BITVEC_TESTS, 7);
+  new_random_bit_range_bitvec (BTOR_TEST_BITVEC_TESTS, 31);
+  new_random_bit_range_bitvec (BTOR_TEST_BITVEC_TESTS, 33);
+  new_random_bit_range_bitvec (BTOR_TEST_BITVEC_TESTS, 64);
+}
+
 /*------------------------------------------------------------------------*/
 
 static void
@@ -2922,8 +2972,7 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (new_bitvec);
   BTOR_RUN_TEST (new_random_bitvec);
   BTOR_RUN_TEST (new_random_range_bitvec);
-  // TODO btor_bv_new_random
-  // TODO btor_bv_new_random_bit_range
+  BTOR_RUN_TEST (new_random_bit_range_bitvec);
 
   BTOR_RUN_TEST (uint64_to_bitvec);
   BTOR_RUN_TEST (uint64_to_bv_to_uint64_bitvec);
