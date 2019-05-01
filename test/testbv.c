@@ -57,15 +57,21 @@ test_new_bitvec (void)
   BtorBitVector *bv;
 
   bv = btor_bv_new (g_mm, BTOR_BV_TYPE_BW);
+#ifndef BTOR_USE_GMP
   assert (btor_bv_get_len (bv) == 1);
+#endif
   btor_bv_free (g_mm, bv);
 
   bv = btor_bv_new (g_mm, BTOR_BV_TYPE_BW - 1);
+#ifndef BTOR_USE_GMP
   assert (btor_bv_get_len (bv) == 1);
+#endif
   btor_bv_free (g_mm, bv);
 
   bv = btor_bv_new (g_mm, BTOR_BV_TYPE_BW + 1);
+#ifndef BTOR_USE_GMP
   assert (btor_bv_get_len (bv) == 2);
+#endif
   btor_bv_free (g_mm, bv);
 }
 
