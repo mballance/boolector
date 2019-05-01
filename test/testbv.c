@@ -192,6 +192,31 @@ test_copy_bitvec (void)
   }
 }
 
+/* This is not true in corner cases or if the RNG is not random enough.
+ * If this fails due to that we might want to consider a larger sample. */
+static void
+test_hash_bitvec (void)
+{
+  uint32_t bw, hash1, hash2, hash3;
+  BtorBitVector *bv1, *bv2, *bv3;
+
+  for (bw = 32; bw <= 64; bw++)
+  {
+    bv1   = btor_bv_new_random (g_mm, g_rng, bw);
+    bv2   = btor_bv_new_random (g_mm, g_rng, bw);
+    bv3   = btor_bv_new_random (g_mm, g_rng, bw);
+    hash1 = btor_bv_hash (bv1);
+    hash2 = btor_bv_hash (bv2);
+    hash3 = btor_bv_hash (bv3);
+    assert (!btor_bv_compare (bv1, bv2) || hash1 != hash2
+            || !btor_bv_compare (bv1, bv3) || hash1 != hash3
+            || !btor_bv_compare (bv2, bv3) || hash2 != hash3);
+    btor_bv_free (g_mm, bv1);
+    btor_bv_free (g_mm, bv2);
+    btor_bv_free (g_mm, bv3);
+  }
+}
+
 /*------------------------------------------------------------------------*/
 
 static void
@@ -2990,6 +3015,7 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (new_random_range_bitvec);
   BTOR_RUN_TEST (new_random_bit_range_bitvec);
   BTOR_RUN_TEST (copy_bitvec);
+  BTOR_RUN_TEST (hash_bitvec);
 
   BTOR_RUN_TEST (uint64_to_bitvec);
   BTOR_RUN_TEST (uint64_to_bv_to_uint64_bitvec);
@@ -3002,8 +3028,6 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST_CHECK_LOG (bv_to_hex_char_bitvec);
   BTOR_RUN_TEST_CHECK_LOG (bv_to_dec_char_bitvec);
   // TODO btor_bv_get_assignment
-
-  // TODO btor_bv_hash
 
   BTOR_RUN_TEST (set_get_flip_bit_bitvec);
 
