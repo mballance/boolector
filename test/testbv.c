@@ -2136,6 +2136,37 @@ test_ite_bitvec (void)
 }
 
 static void
+mod_inverse_bitvec (uint32_t num_tests, uint32_t bit_width)
+{
+  uint32_t i;
+  BtorBitVector *bv, *bvinv, *mul;
+
+  tprintf (" %u", bit_width);
+  fflush (stdout);
+  for (i = 0; i < num_tests; i++)
+  {
+    bv = btor_bv_new_random (g_mm, g_rng, 1);
+    btor_bv_set_bit (bv, 0, 1);  // must be odd
+    bvinv = btor_bv_mod_inverse (g_mm, bv);
+    mul   = btor_bv_mul (g_mm, bv, bvinv);
+    assert (btor_bv_is_one (mul));
+    btor_bv_free (g_mm, mul);
+    btor_bv_free (g_mm, bv);
+    btor_bv_free (g_mm, bvinv);
+  }
+}
+
+static void
+test_mod_inverse_bitvec (void)
+{
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 1);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 7);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 31);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 33);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 64);
+}
+
+static void
 flipped_bit_bitvec (uint32_t num_tests, uint32_t bit_width)
 {
   uint32_t i, j, pos;
@@ -3111,13 +3142,12 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (uext_bitvec);
   BTOR_RUN_TEST (sext_bitvec);
   BTOR_RUN_TEST (ite_bitvec);
+  BTOR_RUN_TEST (mod_inverse_bitvec);
 
   BTOR_RUN_TEST (flipped_bit_bitvec);
   BTOR_RUN_TEST (flipped_bit_range_bitvec);
 
   BTOR_RUN_TEST (is_umulo_bitvec);
-
-  // TODO btor_bv_mod_inverse
 
   BTOR_RUN_TEST (compare_bitvec);
 
