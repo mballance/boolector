@@ -1493,6 +1493,28 @@ binary_bitvec (uint64_t (*int_func) (uint64_t, uint64_t, uint32_t),
 }
 
 static void
+test_set_get_flip_bit_bitvec (void)
+{
+  int32_t i;
+  uint32_t n, v, vv;
+  BtorBitVector *bv;
+
+  for (i = 1; i < 32; i++)
+  {
+    bv = btor_bv_new_random (g_mm, g_rng, i);
+    n  = btor_rng_pick_rand (g_rng, 0, i - 1);
+    v  = btor_bv_get_bit (bv, n);
+    vv = btor_rng_pick_with_prob (g_rng, 500) ? 1 : 0;
+    btor_bv_set_bit (bv, n, vv);
+    assert (btor_bv_get_bit (bv, n) == vv);
+    assert (v == vv || btor_bv_get_bit (bv, n) == (((~v) << 31) >> 31));
+    btor_bv_flip_bit (bv, n);
+    assert (btor_bv_get_bit (bv, n) == (((~vv) << 31) >> 31));
+    btor_bv_free (g_mm, bv);
+  }
+}
+
+static void
 test_one_bitvec (void)
 {
   int32_t i;
@@ -2866,9 +2888,7 @@ run_bitvec_tests (int32_t argc, char **argv)
 
   // TODO btor_bv_hash
 
-  // TODO btor_bv_get_bit
-  // TODO btor_bv_set_bit
-  // TODO btor_bv_flip_bit
+  BTOR_RUN_TEST (set_get_flip_bit_bitvec);
 
   BTOR_RUN_TEST (one_bitvec);
   BTOR_RUN_TEST (ones_bitvec);
@@ -2921,8 +2941,6 @@ run_bitvec_tests (int32_t argc, char **argv)
   BTOR_RUN_TEST (is_one_bitvec);
   BTOR_RUN_TEST (is_ones_bitvec);
   BTOR_RUN_TEST (is_zero_bitvec);
-  // btor_bv_is_min_signed
-  // btor_bv_is_max_signed
   BTOR_RUN_TEST (is_special_const_bitvec);
   BTOR_RUN_TEST (small_positive_int_bitvec);
   BTOR_RUN_TEST (power_of_two_bitvec);
