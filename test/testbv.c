@@ -32,6 +32,7 @@
 
 #define BTOR_TEST_BITVEC_NUM_BITS 65
 #define BTOR_TEST_BITVEC_TESTS 100000
+#define BTOR_TEST_BITVEC_MOD_INV_TESTS 1000
 #define BTOR_TEST_BITVEC_PERF_TESTS 1000000
 
 static Btor *g_btor;
@@ -2151,7 +2152,7 @@ mod_inverse_bitvec (uint32_t num_tests, uint32_t bit_width)
   fflush (stdout);
   for (i = 0; i < num_tests; i++)
   {
-    bv = btor_bv_new_random (g_mm, g_rng, 1);
+    bv = btor_bv_new_random (g_mm, g_rng, bit_width);
     btor_bv_set_bit (bv, 0, 1);  // must be odd
     bvinv = btor_bv_mod_inverse (g_mm, bv);
     mul   = btor_bv_mul (g_mm, bv, bvinv);
@@ -2165,11 +2166,11 @@ mod_inverse_bitvec (uint32_t num_tests, uint32_t bit_width)
 static void
 test_mod_inverse_bitvec (void)
 {
-  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 1);
-  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 7);
-  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 31);
-  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 33);
-  mod_inverse_bitvec (BTOR_TEST_BITVEC_TESTS, 64);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_MOD_INV_TESTS, 1);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_MOD_INV_TESTS, 7);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_MOD_INV_TESTS, 31);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_MOD_INV_TESTS, 33);
+  mod_inverse_bitvec (BTOR_TEST_BITVEC_MOD_INV_TESTS, 64);
 }
 
 static void
