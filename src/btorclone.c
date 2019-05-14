@@ -1,6 +1,6 @@
 /*  Boolector: Satisfiability Modulo Theories (SMT) solver.
  *
- *  Copyright (C) 2013-2018 Aina Niemetz.
+ *  Copyright (C) 2013-2019 Aina Niemetz.
  *  Copyright (C) 2014-2018 Mathias Preiner.
  *  Copyright (C) 2014-2015 Armin Biere.
  *
@@ -910,6 +910,8 @@ clone_aux_btor (Btor *btor,
 #endif
   memcpy (clone, btor, sizeof (Btor));
   clone->mm = mm;
+  btor_rng_clone (&btor->rng, &clone->rng);
+
   BTOR_CLR (&clone->cbs);
   btor_opt_clone_opts (btor, clone);
 #ifndef NDEBUG
