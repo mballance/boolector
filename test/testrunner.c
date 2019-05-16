@@ -376,6 +376,7 @@ run_boolector (int32_t argc, char **argv)
       {
         shrt = boolector_get_opt_shrt (btor, opt);
         lng = boolector_get_opt_lng (btor, opt);
+        if (opt == BTOR_OPT_SAT_ENGINE) continue;
         if ((is_shrt && shrt && !strcmp (shrt, arg.start))
             || (!is_shrt && !strcmp (lng, arg.start)))
         {
@@ -418,6 +419,34 @@ run_boolector (int32_t argc, char **argv)
         {
           print_model        = true;
           print_model_format = "smt2";
+        }
+        else if (!strcmp (arg.start, "SE")
+                 || !strcasecmp (arg.start, "sat-engine"))
+        {
+          int32_t sat_engine = -1;
+          if (!strcasecmp (arg_val, "cadical"))
+          {
+            sat_engine = BTOR_SAT_ENGINE_CADICAL;
+          }
+          else if (!strcasecmp (arg_val, "lingeling"))
+          {
+            sat_engine = BTOR_SAT_ENGINE_LINGELING;
+          }
+          else if (!strcasecmp (arg_val, "picosat"))
+          {
+            sat_engine = BTOR_SAT_ENGINE_PICOSAT;
+          }
+          else if (!strcasecmp (arg_val, "minisat"))
+          {
+            sat_engine = BTOR_SAT_ENGINE_MINISAT;
+          }
+          else
+          {
+            fprintf (stderr, "Invalid SAT engine '%s'\n", arg_val);
+            abort ();
+          }
+          assert (sat_engine > -1);
+          boolector_set_opt (btor, BTOR_OPT_SAT_ENGINE, sat_engine);
         }
         else
         {
