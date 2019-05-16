@@ -733,3 +733,23 @@ invalidmodel3 -o invalidmodel3.log invalidmodel3.btor
 regr-distinct -o regr-distinct.log regr-distinct.smt2
 regsmtparselet -o regsmtparselet.log regsmtparselet.smt2
 smt2pushpop0 -o smt2pushpop0.log smt2pushpop0.smt2 -i
+nondestr_subst1 -o nondestr_subst1.log nondestr_subst1.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst2 -o nondestr_subst2.log nondestr_subst2.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst3 -o nondestr_subst3.log nondestr_subst3.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst4 -o nondestr_subst4.log nondestr_subst4.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst5 -o nondestr_subst5.log nondestr_subst5.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst6 -o nondestr_subst6.log nondestr_subst6.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst7 -o nondestr_subst7.log nondestr_subst7.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst8 -o nondestr_subst8.log nondestr_subst8.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst9 -o nondestr_subst9.log nondestr_subst9.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst10 -o nondestr_subst10.log nondestr_subst10.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst11 -o nondestr_subst11.log nondestr_subst11.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst12 -o nondestr_subst12.log nondestr_subst12.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst13 -o nondestr_subst13.log nondestr_subst13.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst14 -o nondestr_subst14.log nondestr_subst14.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst15 -o nondestr_subst15.log nondestr_subst15.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst16 -o nondestr_subst16.log nondestr_subst16.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst17 -o nondestr_subst17.log nondestr_subst17.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst18 -o nondestr_subst18.log nondestr_subst18.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst19 -o nondestr_subst19.log nondestr_subst19.smt2 -i --nondestr-subst -SE cadical
+nondestr_subst20 -o nondestr_subst20.log nondestr_subst20.smt2 -i --nondestr-subst -SE cadical

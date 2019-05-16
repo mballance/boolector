@@ -993,6 +993,23 @@ set(regressions
   nextcounter5
   nextpoweroftwo016
   nexttoggle
+  nondestr_subst1
+  nondestr_subst10
+  nondestr_subst11
+  nondestr_subst12
+  nondestr_subst13
+  nondestr_subst14
+  nondestr_subst15
+  nondestr_subst16
+  nondestr_subst17
+  nondestr_subst2
+  nondestr_subst3
+  nondestr_subst4
+  nondestr_subst5
+  nondestr_subst6
+  nondestr_subst7
+  nondestr_subst8
+  nondestr_subst9
   normaddneg0
   normaddneg1
   normaddneg2
