@@ -72,7 +72,9 @@ jobs:
         needCython: true
         btorConfig: '--python --py3'
   steps:
-  - script: echo '##vso[task.setvariable variable=ncpus]$(sysctl -n hw.logicalcpu)'
+  - script: |
+      echo '##vso[task.setvariable variable=ncpus]$(sysctl -n hw.logicalcpu)'
+      echo 'nproc: $(sysctl -n hw.logicalcpu)'
 
   - bash: |
       brew install ccache
