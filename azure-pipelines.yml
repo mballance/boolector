@@ -40,8 +40,6 @@ jobs:
     displayName: 'Install Cython'
 
   - script: |
-      echo "nproc: $(nproc)"
-      free
       ./contrib/setup-btor2tools.sh
       ./contrib/setup-cadical.sh
       ./contrib/setup-lingeling.sh
@@ -90,7 +88,6 @@ jobs:
     displayName: 'Install Cython'
 
   - script: |
-      echo "nproc: $(sysctl -h hw.ncpu)"
       ./contrib/setup-btor2tools.sh
       ./contrib/setup-cadical.sh
       ./contrib/setup-lingeling.sh
@@ -99,10 +96,10 @@ jobs:
   - script: $(btorConfigEnv) ./configure.sh $(btorConfig)
     displayName: 'Configure Boolector'
 
-  - script: make -j $(nproc)
+  - script: make -j $(sysctl -h hw.ncpu)
     workingDirectory: 'build'
     displayName: 'Build Boolector'
 
-  - script: ctest -j$(nproc) --output-on-failure
+  - script: ctest -j$(sysctl -h hw.ncpu) --output-on-failure
     workingDirectory: 'build'
     displayName: 'Run CTest'
