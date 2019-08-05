@@ -90,8 +90,7 @@ jobs:
     displayName: 'Install Cython'
 
   - script: |
-      echo "nproc: $(nproc)"
-      free
+      echo "nproc: $(sysctl -h hw.ncpu)"
       ./contrib/setup-btor2tools.sh
       ./contrib/setup-cadical.sh
       ./contrib/setup-lingeling.sh
