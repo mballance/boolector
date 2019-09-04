@@ -1432,8 +1432,8 @@ btor_bv_sub (BtorMemMgr *mm, const BtorBitVector *a, const BtorBitVector *b)
   assert (a->width == b->width);
 
   BtorBitVector *res;
-  uint32_t bw = a->width;
 #ifdef BTOR_USE_GMP
+  uint32_t bw = a->width;
   res = btor_bv_new (mm, bw);
   mpz_sub (res->val, a->val, b->val);
   mpz_fdiv_r_2exp (res->val, res->val, bw);
