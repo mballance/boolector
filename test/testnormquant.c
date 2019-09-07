@@ -9,7 +9,7 @@
 #include "btorcore.h"
 #include "btorexp.h"
 #include "btornode.h"
-#include "normalizer/btornormquant.h"
+#include "preprocess/btornormquant.h"
 #include "testrunner.h"
 
 #ifdef NDEBUG

@@ -16,10 +16,11 @@
 //         x - 1 = ~(-x)
 //         -(x + 1) = ~x
 
-#include "simplifier/btornormadd.h"
+#include "preprocess/btornormadd.h"
 
 #include "btorcore.h"
 #include "btorexp.h"
+#include "btorsubst.h"
 #include "utils/btorhashint.h"
 #include "utils/btorhashptr.h"
 #include "utils/btornodeiter.h"
