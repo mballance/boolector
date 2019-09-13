@@ -567,5 +567,3 @@ btor_substitute_and_rebuild (Btor *btor, BtorPtrHashTable *substs)
   btor_hashint_map_delete (marked_cone);
   assert (btor_dbg_check_lambdas_static_rho_proxy_free (btor));
 }
-
-
