@@ -22,6 +22,8 @@
   - boolector_is_bv_const_ones
   - boolector_is_bv_const_min_signed
   - boolector_is_bv_const_max_signed
+  - boolector_roli
+  - boolector_rori
 
 news for release 3.0.0 since 2.4.1
 --------------------------------------------------------------------------------
