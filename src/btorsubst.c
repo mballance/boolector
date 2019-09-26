@@ -254,7 +254,6 @@ rebuild_noproxy (Btor *btor, BtorNode *node, BtorIntHashTable *cache)
 
 static void
 substitute (Btor *btor,
-            BtorIntHashTable *to_visit_cache,
             BtorNode *roots[],
             size_t nroots,
             BtorPtrHashTable *substitutions)
@@ -266,7 +265,7 @@ substitute (Btor *btor,
 
   int32_t id;
   size_t i;
-  BtorNodePtrStack visit, reset_stack;
+  BtorNodePtrStack visit, reset_stack, release_stack;
   BtorHashTableData *d, *dsub;
   BtorNode *cur, *cur_subst, *real_cur_subst, *rebuilt, *simplified;
   BtorIntHashTable *substs, *cache;
@@ -279,6 +278,7 @@ substitute (Btor *btor,
 
   BTOR_INIT_STACK (btor->mm, visit);
   BTOR_INIT_STACK (btor->mm, reset_stack);
+  BTOR_INIT_STACK (btor->mm, release_stack);
   cache = btor_hashint_map_new (btor->mm);
 
   /* normalize substitutions: -t1 -> t2 ---> t1 -> -t2 */
@@ -332,20 +332,22 @@ substitute (Btor *btor,
 
     /* do not traverse nodes that were not previously marked or are already
      * processed */
-    d = btor_hashint_map_get (to_visit_cache, id);
-    if (!d) continue;
+
+    if (!cur->rebuild) continue;
+
+    d = btor_hashint_map_get (cache, id);
     BTORLOG (2,
              "  visit (%s): %s",
-             d->as_int == 0 ? "pre" : "post",
+             !d || d->as_int == 0 ? "pre" : "post",
              btor_util_node2string (cur));
     assert (opt_nondestr_subst || !btor_node_is_simplified (cur));
     assert (!btor_node_is_proxy (cur));
 
-    if (d->as_int == 0)
+    if (!d)
     {
-      btor_hashint_map_add (cache, id);
+      d         = btor_hashint_map_add (cache, id);
+      d->as_ptr = 0;
       BTOR_PUSH_STACK (visit, cur);
-      d->as_int = 1;
 
       if ((dsub = btor_hashint_map_get (substs, id)) && dsub->as_ptr)
       {
@@ -363,10 +365,8 @@ substitute (Btor *btor,
         BTOR_PUSH_STACK (visit, cur->e[i]);
       }
     }
-    else
+    else if (!d->as_ptr)
     {
-      assert (d->as_int == 1);
-
       if ((dsub = btor_hashint_map_get (substs, id)) && dsub->as_ptr)
       {
         cur_subst = dsub->as_ptr;
@@ -391,19 +391,11 @@ substitute (Btor *btor,
 
       assert (rebuilt);
       assert (!btor_node_is_simplified (rebuilt));
-      // TODO(ma): check -> dsub || rebuilt != cur
-      // assert (rebuilt != cur);
-      // assert (!btor_hashint_map_contains (
-      //    mark, btor_node_get_id (btor_node_real_addr (rebuilt))));
 
-      // TODO(ma): Note if this does not work maybe another fix would be
-      // substitution until fixpoint?
-      if (cur != rebuilt
-          && btor_hashint_map_contains (
-              to_visit_cache, btor_node_get_id (btor_node_real_addr (rebuilt))))
+      if (cur != rebuilt && btor_node_real_addr (rebuilt)->rebuild)
       {
-        assert (btor_node_real_addr (rebuilt)->refs > 1);
-        btor_node_release (btor, rebuilt);
+        BTORLOG (1, "needs rebuild: %s", btor_util_node2string (rebuilt));
+        BTOR_PUSH_STACK (release_stack, rebuilt);
         BTOR_PUSH_STACK (visit, cur);
         BTOR_PUSH_STACK (visit, rebuilt);
         continue;
@@ -439,7 +431,12 @@ substitute (Btor *btor,
       btor_node_release (btor, rebuilt);
 
       /* mark as done */
-      btor_hashint_map_remove (to_visit_cache, id, 0);
+      cur->rebuild = 0;
+      BTORLOG (1, "reset needs rebuild: %s", btor_util_node2string (cur));
+#ifndef NDEBUG
+      for (i = 0; i < cur->arity; i++)
+        assert (!btor_node_real_addr (cur->e[i])->rebuild);
+#endif
     }
   } while (!BTOR_EMPTY_STACK (visit));
 
@@ -475,7 +472,14 @@ substitute (Btor *btor,
   }
   BTOR_RELEASE_STACK (reset_stack);
 
+  while (!BTOR_EMPTY_STACK (release_stack))
+  {
+    btor_node_release (btor, BTOR_POP_STACK (release_stack));
+  }
+  BTOR_RELEASE_STACK (release_stack);
+
   BTORLOG (1, "end substitute");
+  assert (btor_dbg_check_unique_table_rebuild (btor));
   assert (btor_dbg_check_constraints_simp_free (btor));
 }
 
@@ -492,7 +496,6 @@ btor_substitute_and_rebuild (Btor *btor, BtorPtrHashTable *substs)
   BtorMemMgr *mm;
   BtorPtrHashTableIterator it;
   BtorNodeIterator nit;
-  BtorIntHashTable *marked_cone;
   bool ispushed;
   uint32_t i;
   bool opt_nondestr_subst;
@@ -500,7 +503,6 @@ btor_substitute_and_rebuild (Btor *btor, BtorPtrHashTable *substs)
   if (substs->count == 0u) return;
 
   mm   = btor->mm;
-  marked_cone        = btor_hashint_map_new (mm);
   opt_nondestr_subst = btor_opt_get (btor, BTOR_OPT_NONDESTR_SUBST) == 1;
 
   BTOR_INIT_STACK (mm, stack);
@@ -523,10 +525,17 @@ btor_substitute_and_rebuild (Btor *btor, BtorPtrHashTable *substs)
     assert (!BTOR_EMPTY_STACK (stack));
     cur = btor_node_real_addr (BTOR_POP_STACK (stack));
     assert (opt_nondestr_subst || !btor_node_is_simplified (cur));
-    if (!btor_hashint_map_contains (marked_cone, cur->id))
+    if (!cur->rebuild)
     {
       BTORLOG (2, "  cone: %s", btor_util_node2string (cur));
-      btor_hashint_map_add (marked_cone, cur->id);
+      // btor_hashint_map_add (marked_cone, cur->id);
+
+      /* All nodes in the cone of the substitutions need to be rebuilt. This
+       * flag gets propagated to the parent nodes when a node gets created.
+       * After a completed substitution pass, the flag for every node must be
+       * zero. */
+      cur->rebuild = 1;
+
       btor_iter_parent_init (&nit, cur);
       /* are we at a root ? */
       ispushed = false;
@@ -553,7 +562,6 @@ btor_substitute_and_rebuild (Btor *btor, BtorPtrHashTable *substs)
   BTOR_RELEASE_STACK (stack);
 
   substitute (btor,
-              marked_cone,
               root_stack.start,
               BTOR_COUNT_STACK (root_stack),
               substs);
@@ -564,6 +572,5 @@ btor_substitute_and_rebuild (Btor *btor, BtorPtrHashTable *substs)
   }
   BTOR_RELEASE_STACK (root_stack);
 
-  btor_hashint_map_delete (marked_cone);
   assert (btor_dbg_check_lambdas_static_rho_proxy_free (btor));
 }
